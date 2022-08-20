@@ -1,0 +1,18 @@
+for Tr in  0.3180; do
+for col in 2 3 4 5;do
+echo $col 1
+#cp ChosenAvaSeries/AvalanchesRun1-Tr$Tr""*col$col"".dat dummy1
+cat ChosenAvaSeries/AvalanchesRun*-Tr$Tr""*col$col"".dat > dummy1
+echo $col 2
+
+Larg=$(sort -k 1 -n dummy1 |tail -n 1 |awk '{print $1}')
+div=$(wc -l dummy1| awk '{print $1}')
+echo $col 3
+awk  -v L=$Larg -v D=$div '{a[$1]++} END {for(i=0;i<L+1;++i) {print i,a[i]/D}}' dummy1 > Psdummy
+echo $col 4
+awk '{ ind=1+int(log($1)/log(2)); num[ind]+=$2;den[ind]++ } END {for (i=1;i<20;i++) print 2^(i-0.5), num[i]/den[i],num[i],den[i]}'  Psdummy > Ps_vs_sTr$Tr""col$col"".dat
+echo $col 5
+
+rm dummy1 Psdummy
+done
+done

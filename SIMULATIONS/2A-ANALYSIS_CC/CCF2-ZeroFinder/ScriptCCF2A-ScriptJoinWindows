@@ -1,0 +1,36 @@
+# This script generates the average C(r) for all windows of size W, for each sample i, and each Threshold Tr
+
+# Complete Run
+#for Tr in 0.3100 0.3140 0.3160 0.3170 0.3175 0.3180 0.3185 0.3190 0.3200 0.3220 0.3260 0.330; do
+#mkdir -p Correlation-Tr$Tr
+#for i in $(seq 1 20); do
+
+# Fast Run
+for Tr in  0.3100 0.3180 0.3300; do
+
+mkdir -p AllCorrelations/Correlation-Tr$Tr
+for i in 1 2 3; do
+#for i in $(seq 1 3); do
+
+
+for W in 30 50 70 100 150 200 250 300 400 500; do
+
+output=AllCorrelations/Correlation-Tr$Tr""/AvgCCF-Tr$Tr""Run$i""Length$W"".dat
+rm -f $output
+
+# Generate unnormalized average
+rm -f draftfile
+MAXDIST=$(grep $Tr ../MAXDISTtable | awk -v W=$W '{if ($2==W) print $3}')
+for d in $(seq 0 $MAXDIST ); do
+ awk -v d=$d '{if ($1==d) {N+=$3;D+=$4}} END {print d,N/D,N,D}' ../CCF1-CorrelationAnalisys/ResultsCorrel/CorrelRun$i""-Tr$Tr""W$W""x*.dat  >>  draftfile
+done 
+# Normalize so that C(0)=1
+norm=$(head -n 1 draftfile |awk '{print 1/$2}')
+awk -v norm=$norm '{print $1, $2*norm}' draftfile > $output
+rm draftfile
+
+
+done
+done
+done
+

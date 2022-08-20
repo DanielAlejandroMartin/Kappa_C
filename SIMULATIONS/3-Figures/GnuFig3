@@ -1,0 +1,53 @@
+
+
+set terminal pdfcairo size 4.0in,2.0in font ',8'
+set output "Figure3.pdf"
+
+
+
+set key  font ",6" 
+set xtics 0.05
+
+
+
+     set multiplot
+     set size 0.4,0.8
+     set origin 0.1,0.1
+set yrange [0:200]
+set ytics 100
+
+set xrange [0:500]
+set xtics 250
+
+set xlabel "W"
+set ylabel "r0"
+
+
+
+ plot \
+"../2A-ANALYSIS_CCF/CCF2-ZeroFinder/AvgCCF-Tr0.3100.dat" w lp pt 4 lc "blue" t "0.31",\
+"../2A-ANALYSIS_CCF/CCF2-ZeroFinder/AvgCCF-Tr0.3140.dat" w lp pt 8 lc "orange" t "0.314",\
+"../2A-ANALYSIS_CCF/CCF2-ZeroFinder/AvgCCF-Tr0.3180.dat" w lp pt 7 lc "green" t "0.318",\
+"../2A-ANALYSIS_CCF/CCF2-ZeroFinder/AvgCCF-Tr0.3220.dat" w lp pt 8 lc "cyan" t "0.322",\
+"../2A-ANALYSIS_CCF/CCF2-ZeroFinder/AvgCCF-Tr0.3300.dat" w lp pt 4 lc "red" t "0.33"
+
+
+     set size 0.4,0.8
+     set origin 0.5,0.1
+set logscale x
+set xrange [20:600]
+set xtics ('20' 20, '100' 100, '500' 500)
+
+
+
+ plot \
+"../2A-ANALYSIS_CCF/CCF2-ZeroFinder/AvgCCF-Tr0.3100.dat" w lp pt 4 lc "blue" t "0.31",\
+"../2A-ANALYSIS_CCF/CCF2-ZeroFinder/AvgCCF-Tr0.3140.dat" w lp pt 8 lc "orange" t "0.314",\
+"../2A-ANALYSIS_CCF/CCF2-ZeroFinder/AvgCCF-Tr0.3180.dat" w lp pt 7 lc "green" t "0.318",\
+"../2A-ANALYSIS_CCF/CCF2-ZeroFinder/AvgCCF-Tr0.3220.dat" w lp pt 8 lc "cyan" t "0.322",\
+"../2A-ANALYSIS_CCF/CCF2-ZeroFinder/AvgCCF-Tr0.3300.dat" w lp pt 4 lc "red" t "0.33"
+
+
+
+     unset multiplot
+

@@ -1,0 +1,1 @@
+head -n 5100 ../1-SIMULATION/1-DynamicsGenerator/ResultsActivity_AlreadyComputed/ActivityRun6-Tr0.3180.dat | tail -n 100 |awk '{print NR, $2}' > AvaExampleFig1b.dat

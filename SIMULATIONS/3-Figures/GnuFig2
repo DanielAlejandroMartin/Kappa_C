@@ -1,0 +1,49 @@
+
+
+set terminal pdfcairo size 4.0in,2.0in font ',8'
+set output "Figure2.pdf"
+
+
+
+set key  font ",6" 
+set xtics 0.05
+
+
+
+
+
+
+set logscale
+
+
+
+
+     set multiplot
+     set size 0.4,0.8
+     set origin 0.1,0.1
+set yrange [1e-9:1]
+set ytics ('1' 1,'10^{-2}' 0.01,'10^{-4}' 0.0001, '10^{-6}' 0.000001, '10^{-8}' 1e-8)
+
+set xrange [1:1e6]
+set xtics ('1' 1,'10^{2}' 100,'10^{4}' 10000, '10^{6}' 1000000)
+set xlabel "s"
+set ylabel "P(s)"
+
+
+
+plot "../2B-ANALYSIS_AVA/AVALANCHE1-thresholdFinder/Ps_vs_sTr0.3100.dat" w lp lc "blue" pt 4 t "T=0.31", \
+"../2B-ANALYSIS_AVA/AVALANCHE1-thresholdFinder/Ps_vs_sTr0.3180.dat" w  lp lc "green" pt 7 t "T=0.318", \
+ "../2B-ANALYSIS_AVA/AVALANCHE1-thresholdFinder/Ps_vs_sTr0.3300.dat" w lp lc "red" pt 4 t "T=0.33",\
+3*x**(-1.5) t "s^{-1.5}"
+
+
+     set size 0.4,0.8
+     set origin 0.5,0.1
+plot "../2B-ANALYSIS_AVA/AVALANCHE2-WindowSizeFigPanelb/Ps_vs_sTr0.3180col3.dat" w lp lc "black" pt 5 t "W=L", \
+ "../2B-ANALYSIS_AVA/AVALANCHE2-WindowSizeFigPanelb/Ps_vs_sTr0.3180col2.dat" w lp lc "green" pt 7 t "W=500", \
+ "../2B-ANALYSIS_AVA/AVALANCHE2-WindowSizeFigPanelb/Ps_vs_sTr0.3180col4.dat" w lp lc "orange" pt 15 t "W=250", \
+ "../2B-ANALYSIS_AVA/AVALANCHE2-WindowSizeFigPanelb/Ps_vs_sTr0.3180col5.dat" w lp lc "cyan" pt 11 t "W=125", \
+3*x**(-1.5) t "s^{-1.5}"
+
+     unset multiplot
+

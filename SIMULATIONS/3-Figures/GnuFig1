@@ -1,0 +1,90 @@
+set terminal pdfcairo size 4.0in,4.0in font ',8'
+set output "Figure1.pdf"
+
+
+
+set key  font ",6" 
+set xtics 0.05
+
+     set multiplot
+#------------------------------------------------------------------------------
+# Up Left
+#------------------------------------------------------------------------------ 
+     set size 0.4,0.4
+     set origin 0.1,0.5
+#set yrange [1e-9:1]
+#set ytics ('1' 1,'10^{-2}' 0.01,'10^{-4}' 0.0001, '10^{-6}' 0.000001, '10^{-8}' 1e-8)
+
+#set xrange [1:1e6]
+#set xtics ('1' 1,'10^{2}' 100,'10^{4}' 10000, '10^{6}' 1000000)
+
+set xtics 50
+set ytics 30
+set xlabel "t"
+set ylabel "A(t)"
+
+plot "../2B-ANALYSIS_AVA/AvaExampleFig1b.dat" w l lc "black"  notitle 
+
+
+#------------------------------------------------------------------------------
+# Up Right
+#------------------------------------------------------------------------------ 
+     set size 0.4,0.4
+     set origin 0.5,0.5
+	
+set yrange  [0:1.05]
+set ytics 0.5
+set ylabel "F(s)"
+set xtics ('10^{2}' 100,'10^{4}' 10000)
+set xlabel "s"
+
+set key right bottom
+
+	set logscale x
+
+plot "../2B-ANALYSIS_AVA/AVALANCHE1-thresholdFinder/AvgCurve-Tr0.3100.dat" w lp lc "blue" pt 4 t "T=0.31", \
+"../2B-ANALYSIS_AVA/AVALANCHE1-thresholdFinder/AvgCurve-Tr0.3180.dat" w  lp lc "green" pt 7 t "T=0.318", \
+"" u 1:3 w l ls 3 t "Ideal",\
+"../2B-ANALYSIS_AVA/AVALANCHE1-thresholdFinder/AvgCurve-Tr0.3300.dat" w lp lc "red" pt 4 t "T=0.33"
+
+unset logscale x
+
+#------------------------------------------------------------------------------
+# Down Left
+#------------------------------------------------------------------------------ 
+     set size 0.4,0.4
+     set origin 0.1,0.1
+set yrange [-0.01:0.03]
+
+set key right top
+set ytics 0.01
+set xtics 50
+
+set xlabel "r"
+set ylabel "C(r)"
+# In the paper, Fig. 1d, instead of plotting results for Run 1, we averaged the correlation functions for all Runs
+plot "../2A-ANALYSIS_CCF/CCF2-ZeroFinder/AllCorrelations/Correlation-Tr0.3180/AvgCCF-Tr0.3180Run1Length50.dat" w l lc "violet" t "W=50",\
+     "../2A-ANALYSIS_CCF/CCF2-ZeroFinder/AllCorrelations/Correlation-Tr0.3180/AvgCCF-Tr0.3180Run1Length150.dat" w l lc "cyan" t "W=150",\
+     "../2A-ANALYSIS_CCF/CCF2-ZeroFinder/AllCorrelations/Correlation-Tr0.3180/AvgCCF-Tr0.3180Run1Length250.dat" w l lc "orange" t "W=250",\
+     "../2A-ANALYSIS_CCF/CCF2-ZeroFinder/AllCorrelations/Correlation-Tr0.3180/AvgCCF-Tr0.3180Run1Length500.dat" w l lc "green" t "W=500",\
+ 0 lc "black"
+
+#------------------------------------------------------------------------------
+# Down Right
+#------------------------------------------------------------------------------ 
+     set size 0.4,0.4
+     set origin 0.5,0.1
+
+set key right bottom
+set yrange [0:200]
+set xrange [0:500]
+set xlabel "W"
+set ylabel "r0"
+set xtics "250"
+set ytics "100"
+plot "../2A-ANALYSIS_CCF/CCF2-ZeroFinder/AvgCCF-Tr0.3180.dat" w lp pt 7 lc "green" t ""
+
+
+
+     unset multiplot
+

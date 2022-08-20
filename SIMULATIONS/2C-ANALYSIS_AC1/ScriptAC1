@@ -1,0 +1,37 @@
+rm  AvgAC1.dat
+
+for Tr in 0.3100 0.3140  0.3180 0.3220 0.3300; do
+rm AC1-Tr$Tr"".dat
+for i in {1..3}; do
+rm input
+cat ../1-SIMULATION/1-DynamicsGenerator/ResultsActivity_AlreadyComputed/ActivityRun$i""-Tr$Tr"".dat \
+ | awk '{print $1,$2}' |tail -n 95000 > input0
+
+
+# Print from a to b
+cp  input0  input
+# We assume that the system is stationary,so we compute as if the function was periodic
+head -n 1 input0 >> input 
+
+
+Res=$(awk '{if (NR>1) {a+=$2;a2+=$2*$2;axant+=$2*actant;n++};actant=$2}\
+ END \
+{axant/=n;a2/=n;a/=n;Var=a2-a*a; print (axant-a*a)/Var}' input)
+
+echo $i $Res >> AC1-Tr$Tr"".dat
+done
+
+
+Res=$(awk  '{m+=$2;n++; v+=$2*$2} END {m/=n;v/=n; sd=v-m*m; sd=sqrt(sd); print m,sd}' AC1-Tr$Tr"".dat)
+
+echo $Tr $Res >> AvgAC1.dat
+
+
+done
+
+
+
+
+
+
+

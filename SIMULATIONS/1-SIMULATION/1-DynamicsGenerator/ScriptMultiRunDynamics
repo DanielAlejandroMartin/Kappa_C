@@ -1,0 +1,40 @@
+# Mersenne Twister Random number generator from http://www.math.sci.hiroshima-u.ac.jp/m-mat/MT/VERSIONS/FORTRAN/mt95.f90
+# See Copyright at the beginning of the file
+gfortran -O3 -c mt95.f90 
+
+
+# To reproduce all Figures
+#for i in $(seq 1 20); do
+#for Tr in 0.3100 0.3140 0.3160 0.3170 0.3175 0.3180 0.3185 0.3190 0.3200 0.3220 0.3260 0.330; do
+
+# Fast Run
+for i in $(seq 1 3); do
+for Tr in 0.3100  0.3180 0.3300; do
+
+
+cp Program_1_Generate_Runs.f90 Prog.f90
+
+
+# Avoid Running if already run
+if  [ ! -f ./Finished/Run$i""-Tr$Tr"".dat  ];
+then
+
+#*** Make a copy of the program, searching & replacing the value of its variables ***
+perl -pi -e "s[Threshold=0.3180][Threshold=$Tr]g" Prog.f90
+perl -pi -e "s[Run=1][Run=$i ]g" Prog.f90
+#For each run we assign a different random number generator seed as follows:
+perl -pi -e "s[seed=98176][seed=98$i""76  ]g" Prog.f90
+
+gfortran -O3 -funroll-loops -c Prog.f90
+gfortran -O3 Prog.o mt95.o -o Prun
+
+echo "Running Simulation for Seed", $i, "Threshold" $Tr
+./Prun
+
+# Optional: Compress the output to save hard disk (uncompress when needed)
+gzip -f ./ResultsState/StateRun$i""-Tr$Tr"".dat
+
+fi
+
+done
+done 

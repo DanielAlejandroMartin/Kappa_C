@@ -1,0 +1,11 @@
+for Tr in 0.3100  0.3180 0.3300; do
+rm AvgCurve-Tr$Tr"".dat
+for l in $(seq 1 10); do
+rm dummy1
+# for i in $(seq 1 20); 
+ for i in $(seq 1 3); 
+do cat CurvesKappaS/F_s_vs_sRun$i""-Tr$Tr"".dat | sed -n $l""p >> dummy1
+done
+awk '{a=$1;b+=$2;c=$3;n++} END{print a,b/n,c}' dummy1 >> AvgCurve-Tr$Tr"".dat; 
+done
+done

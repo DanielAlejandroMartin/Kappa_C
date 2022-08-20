@@ -1,0 +1,94 @@
+# You can run this script in a GNUlinux or mac terminal with "bash ScriptFigs1to4" or "zsh  ScriptFigs1to4" or similar. 
+# You can also make it an executable.
+
+echo "The steps for producing results for Figs 1-4 of the article require several simple Fotran codes and bash scripts."
+echo "This script calls them all in appropiate order."
+echo "You can call them imdependanty."
+echo ""
+
+
+echo "Fist, go to the simulation folder/directory (1-SIMULATION/1-DynamicsGenerator/)"
+
+cd 1-SIMULATION/1-DynamicsGenerator/
+
+echo "The simulation code is Program_1_Generate_Runs.f90"
+echo ""
+echo "this code depends on Mersenne Twister Random Number generator (mt95.f90)"
+echo "mt95.f90 module by José Rui Faustino de Sousa, based on a C-program for MT19937, coded by Takuji Nishimura and Makoto Matsumoto"
+echo " information and copyright for this module can be found here: http://www.math.sci.hiroshima-u.ac.jp/m-mat/MT/VERSIONS/FORTRAN/mt95.f90."
+echo ""
+echo "We run ScriptMultiRunDynamics script. It generates, compiles and runs modified copies of the code "Program_1_Generate_Runs.f90" for different values of the parameters. Feel free to modify it"
+echo ""
+###bash ScriptMultiRunDynamics
+echo "Each run will generate 2 files"
+echo "./ResultsActivity/ActivityRun1-Tr0.3180.dat has two columns: time and number of Active neurons within the window."
+echo "./ResultsState/StateRun1-Tr0.3180.dat has the (unformatted) state of all neurons recorded every t_interval (=20 by default) steps."
+echo ""
+echo "Now we go Compute the connected correlation function CCF"
+
+################################################################################################################
+
+echo ""
+echo "*********************************"
+echo "***            CCF            ***"
+echo "*********************************"
+echo ""
+echo "go to the CCF folder (2A-ANALYSIS_CCF/CCF1-CorrelationAnalisys) and run the Script (ScriptMultiRunCCF1)"
+echo "it generates copies of the program 2A-ComputeCCF.f90 for different values of the parameters"
+echo "the program user results in 1-SIMULATION/1-DynamicsGenerator/ResultsState to generate CCF on windows of different sizes, that are saved in ./ResultsCorrel"
+cd ../../2A-ANALYSIS_CCF/CCF1-CorrelationAnalisys/
+bash ScriptMultiRunCCF1
+echo ""
+echo "Now Compute the zero crossings of CCF in the folder CCF2-ZeroFinder."
+cd ../CCF2-ZeroFinder/
+echo "First Average results over different windows"
+bash ScriptCCF2A-ScriptJoinWindows
+echo "Then find the zeros"
+bash ScriptCCF2B-FindZeros
+echo "finally generate files ready to plot"
+ bash ScriptCCF2C-AverageFunctPlots 
+echo ""
+echo "Now compute Kappa_C in the folder CCF3-Kappa"
+cd ../CCF3-Kappa/
+bash ScriptKappaC 
+echo ""
+echo "We have finished the CCF computations, which are the most time consuming. Now we compute Avalanches."
+echo ""
+
+
+################################################################################################################
+
+echo ""
+echo "*********************************"
+echo "***        AVALANCHES         ***"
+echo "*********************************"
+echo "Go to the correct folder (2B-ANALYSIS_AVA)  and run the scripts in order (they are commented) 
+cd ../../2B-ANALYSIS_AVA/AVALANCHE1-thresholdFinder/
+bash ScriptAva1-trFinder;bash ScriptAva2-KappaCompute; bash ScriptAva3-Ps_vs_s_Plot; bash ScriptAva4-Fig1C 
+echo "Figure 2b requires the same computations as a function of window size. It is done in a separate folder"
+ cd ../AVALANCHE2-WindowSizeFigPanelb/
+bash ScriptAva1-trFinder;bash ScriptAva3-Ps_vs_s_Plot
+echo "Finished Avalanches. Now compute autocorrelation"
+echo ""
+
+
+################################################################################################################
+
+echo ""
+echo "*********************************"
+echo "***           AC1             ***"
+echo "*********************************"
+
+cd ../../2C-ANALYSIS_AC1/
+bash ScriptAC1 
+echo ""
+
+
+################################################################################################################
+echo "Now we plot the figures. Paper figures are on xmgrace. Here we use Gnuplot for simplicity"
+echo ""
+echo "*********************************"
+echo "***         FIGURES           ***"
+echo "*********************************"
+cd ../3-Figures/
+gnuplot GnuFig1; gnuplot GnuFig2; gnuplot GnuFig3; gnuplot GnuFig4 

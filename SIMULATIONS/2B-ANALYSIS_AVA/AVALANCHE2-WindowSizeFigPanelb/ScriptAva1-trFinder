@@ -1,0 +1,40 @@
+mkdir ChosenAvaSeries
+rm ChosenAvaSeries/*
+mkdir AllOutputs
+
+number_of_times=95000 #We used 95000 times in the article
+gfortran -O3 ProgAva.f90 -o ProgA
+
+for Tr in 0.3180; do
+for i in 1 2 3 ; do
+
+
+for col in 2 3 4 5; do
+#col=2 is for W=500
+#col=3 is for W=L
+#col=4 is for W=250
+#col=5 is for W=125
+#col=6 is for W=50
+
+
+tail -n $number_of_times ../../1-SIMULATION/1-DynamicsGenerator/ResultsActivity_AlreadyComputed/ActivityRun$i""-Tr$Tr"".dat | awk -v c=$col '{print $1,$c}' > InputFile.dat
+
+# We will compute the number and duration of avalanches for several values of Avalanche Threshold
+for c_thr in $(seq 0 40); do
+echo $c_thr > Tvalue.dat
+./ProgA
+mv OutputFile.dat AllOutputs/AvalanchesRun$i""-Tr$Tr""c$c_thr""col$col"".dat
+done 
+
+# We choose the ouptut with the largest number of avalanches
+Chosen=$(wc -l AllOutputs/AvalanchesRun$i""-Tr$Tr""*col$col"".dat  |sort -n | grep dat | awk '{print $2}' |tail -n 1)
+cp $Chosen ChosenAvaSeries/
+
+done
+
+done
+done
+########################################################
+
+
+

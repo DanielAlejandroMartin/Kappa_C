@@ -1,0 +1,34 @@
+# This script Finds the zero crossings of C(r) for each windows of size W, for each sample i, and each Threshold Tr
+
+mkdir AllZeros
+
+# Complete Run
+#for Tr in 0.3100 0.3140 0.3160 0.3170 0.3175 0.3180 0.3185 0.3190 0.3200 0.3220 0.3260 0.330; do
+#mkdir -p Zeros-Tr$Tr
+#for i in $(seq 1 20); do
+
+# Fast Run
+for Tr in 0.3100  0.3180 0.3300; do
+mkdir -p AllZeros/Zeros-Tr$Tr
+for i in $(seq 1 3); do
+
+output=AllZeros/Zeros-Tr$Tr""/Zeros-Tr$Tr""Run$i.dat
+rm -f $output
+
+
+for W in 30 50 70 100 150 200 250 300 400 500; do
+input=AllCorrelations/Correlation-Tr$Tr""/AvgCCF-Tr$Tr""Run$i""Length$W"".dat
+
+
+
+
+
+
+R=$(awk '{if ($2<0) {slope=($2-prevy)/($1-prevx);y0=$2-slope*$1;r0=-y0/slope;print r0};prevx=$1;prevy=$2}' $input | head -n 1)
+
+echo $W $R >> $output 
+
+done
+done
+done
+#PPP
