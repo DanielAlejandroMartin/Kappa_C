@@ -3,8 +3,8 @@ Codes for the article "Finite-size correlation behavior near a critical point: a
 
 Simulations programmed mainly by Daniel A. Martin and Eyisto J. Aguilar Trejo, using gfortran and bash. Mouse brain activity download also requiered the use of modified jupyter-notebook algorithms.
 
-Each computation requires several SIMPLE  codes.
-We have left some already computed results to speed up user experience.
+Each computation requires several simple  codes.
+We have left some already computed results to ease code check.
 
 SIMULATIONS FOLDER/DIRECTORY
 ****************************
@@ -15,7 +15,19 @@ In generates the simulations in the folder "1-SIMULATION".  then it goes to this
 "2A-ANALYSIS_CCF/", "2B-ANALYSIS_AVA/",  and "2C-ANALYSIS_AC1/", and computes CCF, avalanche analysis and AC(1) respectivelty.
 Finaly, it goes to 3-Figures and generates the figures.
 
-Scripts for Figure 5left and Figure 5 right are similar, the only changes are in the simulations (variable T for Fig. 5 left, Record all time steps for Fig. 5 right).
+Scripts for Figure 5 left and Figure 5 right are similar, the only changes are in the simulations (variable T for Fig. 5 left, Record all time steps for Fig. 5 right).
 
-DATA ANALYSYS FOLDER/DIRECTORY
+DATA_ANALYSIS FOLDER/DIRECTORY
 ******************************
+
+First, we should download files from Allen database. To do so, you should run "jupyter-notebook DownloadFiles.ipynb" on 1-AllenDownload folder.
+Before that, allensdk tools have to be installed. To work properly, the allensdk has to run on python 3.8 or less (it does not work on python 3.9).
+You may generate a conda enviroenment to run an older version. 
+
+After running, you will download Spike data (Sp.txt), neuron positions (coords.txt), and stimulus info (Static.txt and Nscenes.txt). They are saved in the folder "Files" (you should create it).
+
+Then go to "Analysis" folder, and run the following scripts: "ScriptRunFig6" and "ScriptRunFig7". 
+
+Finally, go to "3-Figures" and run
+gnuplot GnuFig6	
+gnuplot GnuFig7
