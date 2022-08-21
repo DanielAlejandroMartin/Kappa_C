@@ -1,0 +1,16 @@
+output=AllScalars.txt
+rm -f $output
+for Q in $(seq 1 8); do
+
+meantime=$(awk -v R=$Q '{if (NR==R) {print ($1+$2)/2}}' ../StartTimes)
+
+Res=$(awk '{if (NR>1) {a+=$2;a2+=$2*$2;axant+=$2*actant;n++};actant=$2}\
+ END \
+{axant/=n;a2/=n;a/=n;Var=a2-a*a; print a,(axant-a*a)/Var}' ../STIMRegions/ResultsActivityStim/Activity448-Q$Q"".txt )
+
+
+echo $meantime $Res >> $output
+
+done
+cat $output
+awk '{print $1,$3}' $output > AC1.txt

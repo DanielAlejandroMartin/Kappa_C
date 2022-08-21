@@ -1,0 +1,25 @@
+Totaltime=$(head -n 1 ../../Files/Sp.txt  | awk '{print NF}')
+
+for Nsegments in 1 2 4 8 16 32; do
+duration=$(echo "$Totaltime/$Nsegments" |bc)
+
+for Q in $(seq 1 $Nsegments); do
+start=$(echo "($Q-1)*$duration" |bc)
+
+for W in $(seq 128  32 448); do
+
+
+cp ComputeCCFexp.f90 Prog.f90
+
+perl -pi -e "s[time=14400][time=$duration]g" Prog.f90
+perl -pi -e "s[Start_time=1][Start_time=$start]g" Prog.f90
+perl -pi -e "s[ResultsCorrelFOLDER][ResultsCorrel$Nsegments]g" Prog.f90
+perl -pi -e "s[LL=448][LL=$W]g" Prog.f90
+perl -pi -e "s[AvgCCFALL.txt][AvgCCFLength$W""-Q$Q"".txt]g" Prog.f90
+
+gfortran -O3 -funroll-loops Prog.f90 -o Prun 
+./Prun
+
+done 
+done
+done

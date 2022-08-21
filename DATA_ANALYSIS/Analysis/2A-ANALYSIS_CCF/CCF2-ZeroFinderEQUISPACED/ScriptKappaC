@@ -1,0 +1,27 @@
+for Nsegments in 1 2 4 8 16 32; do
+
+duration=$(echo "114099/$Nsegments" |bc)
+
+rm Kappa_C-Ns$Nsegments.dat
+for Q in $(seq 1 $Nsegments); do
+
+input=AllZeros-Ns$Nsegments""/ZerosImproved-Q$Q"".txt 
+
+
+x0=$(head -n 1 $input | awk '{print $1}')
+y0=$(head -n 1 $input | awk '{print $2}')
+
+R1=$(awk -v x0=$x0 -v y0=$y0 '{if ($1>x0) {s+=($2-y0)/($1-x0); s2+=(($2-y0)/($1-x0))**2;n++}} END {s=s/n;s2=s2/n;sd=s2-s**2;sd=sqrt(sd); print sd/s}' $input)
+R2=$(awk -v x0=$x0 -v y0=$y0 '{if ($1>x0) {si=($2-y0)/(log($1)-log(x0));s+=si; s2+=si*si;n++}} END {s=s/n;s2=s2/n;sd=s2-s**2;sd=sqrt(sd); print sd/s}' $input)
+
+
+Ravg=$(echo $Q $R1 $R2 | awk '{if ($2>0) {print  $3*$3/($3*$3+$2*$2)}}') 
+echo $duration $Ravg >>  Kappa_C-Ns$Nsegments.dat
+
+
+done
+done
+
+
+
+

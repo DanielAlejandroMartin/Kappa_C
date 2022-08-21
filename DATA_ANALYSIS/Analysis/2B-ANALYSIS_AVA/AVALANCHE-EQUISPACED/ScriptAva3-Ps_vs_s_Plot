@@ -1,0 +1,15 @@
+mkdir AllAvadist
+
+for Nsegments in 1 2 4 8 16 32; do
+for Q in $(seq 1 $Nsegments); do
+
+cat  ChosenAvaSeries-Ns$Nsegments""/AvalanchesRunQ$Q""-c*.dat > dummy1
+
+Larg=$(sort -k 1 -n dummy1 |tail -n 1 |awk '{print $1}')
+div=$(wc -l dummy1| awk '{print $1}')
+awk  -v L=$Larg -v D=$div '{a[$1]++} END {for(i=0;i<L+1;++i) {print i,a[i]/D}}' dummy1 > Psdummy
+awk '{ ind=1+int(log($1)/log(2)); num[ind]+=$2;den[ind]++ } END {for (i=1;i<20;i++) print 2^(i-0.5), num[i]/den[i],num[i],den[i]}'  Psdummy > AllAvadist/Ps_vs_sNs$Nsegments""-Q$Q"".dat
+
+rm dummy1 Psdummy
+done
+done

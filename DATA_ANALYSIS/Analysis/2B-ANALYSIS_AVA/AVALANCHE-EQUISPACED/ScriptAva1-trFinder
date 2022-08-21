@@ -1,0 +1,34 @@
+for Nsegments in 1 2 4 8 16 32; do
+
+
+folder=ChosenAvaSeries-Ns$Nsegments
+mkdir $folder
+rm $folder""/*
+folder2=AllOutputs-Ns$Nsegments
+mkdir $folder2
+rm $folder2""/*
+
+gfortran -O3 ProgAva.f90 -o ProgA
+
+for Q in $(seq 1 $Nsegments); do
+
+
+cat  ../../EQUISPACEDRegions/ResultsActivity$Nsegments""/Activity448-Q$Q"".txt > InputFile.dat
+
+# We will compute the number and duration of avalanches for several values of Avalanche Threshold
+for c_thr in 0 1 2 3 4 5 6 7 8 9 {10..100..10} {120..500..20} {600..1600..50} {1800..5000..200} {5500..15000..500} ; do
+echo $c_thr > Tvalue.dat
+./ProgA
+mv OutputFile.dat $folder2""/AvalanchesRunQ$Q""-c$c_thr"".dat
+done 
+
+# We choose the ouptut with the largest number of avalanches
+Chosen=$(wc -l $folder2""/AvalanchesRunQ$Q""-c*.dat  |sort -n | grep dat | awk '{print $2}' |tail -n 1)
+cp $Chosen $folder""/
+
+
+done
+done
+
+
+

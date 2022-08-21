@@ -1,0 +1,91 @@
+set terminal pdfcairo size 4.0in,8.0in font ',8'
+set output "Figure7.pdf"
+
+Tc=0.318
+
+set key  font ",6" 
+set xtics 0.05
+
+     set multiplot
+
+#------------------------------------------------------------------------------
+# Up 1
+#------------------------------------------------------------------------------ 
+#     set size 0.8,0.12
+#     set origin 0.1,0.7
+
+#set xrange [1:1.2e5]
+#set xtics auto
+#set ytics auto
+#set xlabel ""
+#set ylabel "neuron"
+#plot 1 w l lc "black"  notitle 
+
+#------------------------------------------------------------------------------
+# Up 2
+#------------------------------------------------------------------------------ 
+     set size 0.8,0.12
+     set origin 0.1,0.55
+
+
+set xtics auto
+set ytics auto
+set xlabel ""
+set ylabel "Rate"
+
+plot "../Analysis/2C-SimpleObservables/AllScalars.txt" u 1:2 w lp lc "black"  notitle 
+
+
+#------------------------------------------------------------------------------
+# Up 3
+#------------------------------------------------------------------------------ 
+     set size 0.8,0.12
+     set origin 0.1,0.4
+	
+set yrange  [*:*]
+set xrange  [0:120000]
+set ytics auto
+set ylabel "Kc"
+set xtics auto
+set xlabel ""
+
+set key right bottom
+
+
+plot "../Analysis/2A-ANALYSIS_CCF/CCF2-ZeroFinderSTIM/Kappa_C.dat"  w lp lc "black"  notitle 
+
+unset logscale x
+
+#------------------------------------------------------------------------------
+# Down 1
+#------------------------------------------------------------------------------ 
+     set size 0.8,0.12
+     set origin 0.1,0.25
+set nokey
+set yrange [*:*]
+
+set key right bottom
+set ytics auto
+set xtics auto
+
+set xlabel ""
+set ylabel "Ks"
+
+plot "../Analysis/2B-ANALYSIS_AVA/AVALANCHE-STIM/KappaS.dat"  w lp t "" lc "black"
+
+#------------------------------------------------------------------------------
+# Down 2
+#------------------------------------------------------------------------------ 
+     set size 0.8,0.12
+     set origin 0.1,0.1
+
+set key right bottom
+
+set xlabel "t"
+set ylabel "AC(1)"
+set xtics auto
+set ytics auto
+plot "../Analysis/2C-SimpleObservables/AllScalars.txt" u 1:3 w lp lc "black"  notitle 
+
+     unset multiplot
+

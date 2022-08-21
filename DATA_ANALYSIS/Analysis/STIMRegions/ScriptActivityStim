@@ -1,0 +1,28 @@
+for W in 448; do
+for Q in {1..8}; do
+
+start=$(awk -v R=$Q '{if (NR==R) {print $1}}' ../StartTimes)
+duration=$(awk -v R=$Q '{if (NR==R) {print $2-$1}}' ../StartTimes)
+
+cp ComputeActivity.f90 ProgAct.f90
+
+perl -pi -e "s[time=14400][time=$duration]g" ProgAct.f90
+perl -pi -e "s[Start_time=1][Start_time=$start]g" ProgAct.f90
+
+
+
+perl -pi -e "s[ResultsActivityFOLDER][ResultsActivityStim]g" ProgAct.f90
+
+#perl -pi -e "s[LL=448][LL=$W]g" ProgAct.f90
+#----------------------------------------
+
+perl -pi -e "s[ActivityALL.txt][Activity$W""-Q$Q"".txt]g" ProgAct.f90
+gfortran -O3  ProgAct.f90 -o Prun
+
+ 
+./Prun
+
+
+echo "-----------------------------------------"
+done 
+done

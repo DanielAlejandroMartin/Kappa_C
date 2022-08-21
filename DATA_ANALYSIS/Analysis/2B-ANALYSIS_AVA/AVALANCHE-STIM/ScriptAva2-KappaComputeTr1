@@ -1,0 +1,60 @@
+# number of elements to compute Kappa_S, "m" in Eq. (1).
+mval=10 
+
+rm -f KappaS.dat 
+#mkdir -p AllKappaS
+#mkdir -p CurvesKappaS
+
+for Q in $(seq 1 8); do
+# c=1 maximzes the total number of avalanches
+cat AllOutputs/AvalanchesRunQ$Q""-c1.dat | sort -k 1 -n > Avalanches0.dat
+
+#This values where used for long timeseries,figs 1-4
+#Min=50.
+#Max=50000.
+
+# Variable minimum and maximum avalanche sizes
+Max=$( tail -n 1 Avalanches0.dat |awk '{print $1*1}')
+Min=$( head -n 1 Avalanches0.dat |awk '{s=$1; if ($1<1) {s=1};print s}')
+
+
+# Only keep Avalanche sizes among Min and Max
+cat Avalanches0.dat | awk -v m1=$Min '{if ($1>m1-1) print}' | awk -v m2=$Max '{if ($1<m2+1) print}' |sort -k 1 -n > Avalanches.dat
+rm Avalanches0.dat
+
+#Compute the step in beta values of Kappa_S (See Eq. 
+DL=$(echo $Max |awk -v m1=$Min  '{print log ($1/m1)/10}')
+#Count the number of avalanches for the normalization
+NAva=$(wc -l Avalanches.dat |awk '{print $1}')
+
+rm -f Curves
+
+#Compute the terms in the summation of Eq. (1). The first element is  F^{NA}(beta_k), and the second is F(beta_k).
+# We assume tau=1.5 as expected for scale-free avalanches.
+for k in $(seq 1 $mval); do
+awk -v i=$k -v D=$DL  -v N=$NAva -v m2=$Max -v m1=$Min \
+'{beta=m1*exp(D*i); if ($1<beta) x++} END \
+{FNA=x/N;F=(1-(1.0*m1/beta)**0.5)/(1-(1.0*m1/m2)**0.5)  ;print beta,FNA,F }' Avalanches.dat >> Curves
+#echo  $acum  >> Curves
+
+done
+
+#cp Curves CurvesKappaS/F_s_vs_sRunQ$Q"".dat
+# Sum the differences among  F^{NA}(beta_k) and  F(beta_k)
+K=$(awk '{a+=$3-$2;n++} END {a=a/n; print 1+a}' Curves )
+#rm Curves
+
+
+meantime=$(awk -v R=$Q '{if (NR==R) {print ($1+$2)/2}}' ../../StartTimes)
+
+echo $meantime  $K >> KappaS.dat
+
+
+done #Q
+
+cat KappaS.dat
+
+#K=$(awk '{a+=$2;a2+=$2**2;n++} END {a=a/n;a2=a2/n;a2=a2-a*a;sd=sqrt(a2);err=sqrt(a2)/sqrt(n); print a,sd, err}' AllKappaS/allKappaSQ$Q"".dat )
+#echo $Tr $K >> KappaS.dat
+
+

@@ -1,0 +1,43 @@
+f(x)=a*(x-x0)**2+b
+a=1
+b=1
+x00=50
+x0=x00
+
+set print "fitpar.txt"
+
+
+if (x0 > 20) {
+fit [(x0)/2:3*(x0)/2] f(x) "suminput.dat" via a,b,x0
+if (FIT_CONVERGED != 1) {
+  print "No starting point led to convergence."
+x0=x00 }
+dx=sqrt((x0-x00)**2)/x00
+if (dx > 0.3) {
+x0=x00 }
+}
+
+if (x0 > 20) {
+fit [(x0)/2:3*(x0)/2] f(x) "suminput.dat" via a,b,x0
+if (FIT_CONVERGED != 1) {
+  print "No starting point led to convergence."
+x0=x00 }
+dx=sqrt((x0-x00)**2)/x00
+if (dx > 0.3) {
+x0=x00 }
+}
+
+if (x0 > 20) {
+fit [(x0)/2:3*(x0)/2] f(x) "suminput.dat" via a,b,x0
+if (FIT_CONVERGED != 1) {
+  print "No starting point led to convergence."
+x0=x00 }
+dx=sqrt((x0-x00)**2)/x00
+if (dx > 0.3) {
+x0=x00 }
+}
+
+
+
+print x0, x0_err
+

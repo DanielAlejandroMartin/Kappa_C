@@ -1,0 +1,28 @@
+for W in $(seq 128  32 448); do
+for Q in {1..8}; do
+
+start=$(awk -v R=$Q '{if (NR==R) {print $1}}' ../StartTimes)
+duration=$(awk -v R=$Q '{if (NR==R) {print $2-$1}}' ../StartTimes)
+
+cp ComputeCCFexp.f90 Prog.f90
+
+perl -pi -e "s[time=14400][time=$duration]g" Prog.f90
+perl -pi -e "s[Start_time=1][Start_time=$start]g" Prog.f90
+
+#perl -pi -e "s[timeseries4.txt][timeseriesL$W""Q$Q"".dat]g" Prog.f90
+
+perl -pi -e "s[ResultsCorrelFOLDER][ResultsCorrelStim]g" Prog.f90
+#****************************************************
+perl -pi -e "s[LL=448][LL=$W]g" Prog.f90
+#----------------------------------------
+
+perl -pi -e "s[AvgCCFALL.txt][AvgCCFLength$W""-Q$Q"".txt]g" Prog.f90
+gfortran -O3 -funroll-loops Prog.f90 -o Prun
+
+ 
+./Prun
+
+
+echo "-----------------------------------------"
+done 
+done

@@ -1,0 +1,18 @@
+awk '{print NR, $2}'  ../2A-ANALYSIS_CCF/CCF2-ZeroFinderSTIM/Kappa_C.dat > KappaC
+awk '{print NR, $2}'  ../2B-ANALYSIS_AVA/AVALANCHE-STIM/KappaS.dat > KappaS
+
+awk '{print NR, $2}' ../2C-SimpleObservables/AllScalars.txt > Rate
+awk '{print NR, $3}' ../2C-SimpleObservables/AllScalars.txt > AC1
+#awk '{print NR, 1-sqrt(($2-1)**2)}'  ../2B-ANALYSIS_AVA/AVALANCHE-STIM/KappaS.dat > KappaSabs
+
+
+for A in AC1 Rate;do
+for B in KappaC KappaS;do
+
+
+join $A $B | awk '{print $2,$3}'> Pair$A$B"".dat
+echo $A  $B
+ datamash -W ppearson 1:2 < Pair$A$B"".dat
+echo ""
+done
+done

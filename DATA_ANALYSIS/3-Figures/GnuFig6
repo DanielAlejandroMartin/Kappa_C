@@ -1,0 +1,114 @@
+set terminal pdfcairo size 4.0in,4.0in font ',8'
+set output "Figure6.pdf"
+
+
+
+set key  font ",6" 
+set xtics 0.05
+
+     set multiplot
+#------------------------------------------------------------------------------
+# Up Left
+#------------------------------------------------------------------------------ 
+     set size 0.4,0.4
+     set origin 0.1,0.5
+
+set xtics 50
+set ytics 50
+set xlabel "xi (mu m)"
+set ylabel "W( mu m)"
+
+plot "../Analysis/2A-ANALYSIS_CCF/CCF2-ZeroFinderEQUISPACED/AllZeros-Ns1/ZerosImproved-Q1.txt" w lp pt 4 lc "blue"  notitle ,\
+"../Analysis/2A-ANALYSIS_CCF/CCF2-ZeroFinderEQUISPACED/AllZeros-Ns8/ZerosImproved-Q1.txt" w l lc "brown"  notitle,\
+"../Analysis/2A-ANALYSIS_CCF/CCF2-ZeroFinderEQUISPACED/AllZeros-Ns8/ZerosImproved-Q2.txt" w l lc "brown"  notitle,\
+"../Analysis/2A-ANALYSIS_CCF/CCF2-ZeroFinderEQUISPACED/AllZeros-Ns8/ZerosImproved-Q3.txt" w l lc "brown"  notitle,\
+"../Analysis/2A-ANALYSIS_CCF/CCF2-ZeroFinderEQUISPACED/AllZeros-Ns8/ZerosImproved-Q4.txt" w l lc "brown"  notitle,\
+"../Analysis/2A-ANALYSIS_CCF/CCF2-ZeroFinderEQUISPACED/AllZeros-Ns8/ZerosImproved-Q5.txt" w l lc "brown"  notitle,\
+"../Analysis/2A-ANALYSIS_CCF/CCF2-ZeroFinderEQUISPACED/AllZeros-Ns8/ZerosImproved-Q6.txt" w l lc "brown"  notitle,\
+"../Analysis/2A-ANALYSIS_CCF/CCF2-ZeroFinderEQUISPACED/AllZeros-Ns8/ZerosImproved-Q7.txt" w l lc "brown"  notitle,\
+"../Analysis/2A-ANALYSIS_CCF/CCF2-ZeroFinderEQUISPACED/AllZeros-Ns8/ZerosImproved-Q8.txt" w l lc "brown"  notitle
+
+#------------------------------------------------------------------------------
+# Up Right
+#------------------------------------------------------------------------------ 
+     set size 0.4,0.4
+     set origin 0.5,0.5
+
+set xrange  [1e3:2e5]	
+set yrange  [0.1:1]
+set ytics 0.50
+set ylabel "Kc"
+set xtics auto
+set xlabel "frames"
+
+set key right bottom
+
+	set logscale x
+
+ plot "../Analysis/2A-ANALYSIS_CCF/CCF2-ZeroFinderEQUISPACED/Kappa_C-Ns32.dat"  w p pt 7 ps 0.8  t "",\
+"../Analysis/2A-ANALYSIS_CCF/CCF2-ZeroFinderEQUISPACED/Kappa_C-Ns16.dat" w p pt 7 ps 0.8 t "",\
+"../Analysis/2A-ANALYSIS_CCF/CCF2-ZeroFinderEQUISPACED/Kappa_C-Ns8.dat" w p pt 7 ps 0.8 t "",\
+"../Analysis/2A-ANALYSIS_CCF/CCF2-ZeroFinderEQUISPACED/Kappa_C-Ns4.dat" w p pt 7 ps 0.8 t "",\
+"../Analysis/2A-ANALYSIS_CCF/CCF2-ZeroFinderEQUISPACED/Kappa_C-Ns2.dat" w p pt 7 ps 0.8 t "",\
+"../Analysis/2A-ANALYSIS_CCF/CCF2-ZeroFinderEQUISPACED/Kappa_C-Ns1.dat" w p pt 7 ps 0.8 t ""
+
+
+unset logscale x
+
+#------------------------------------------------------------------------------
+# Down Left
+#------------------------------------------------------------------------------ 
+     set size 0.4,0.4
+     set origin 0.1,0.1
+set yrange [1e-6:3e-1]
+set xrange [1:1e3]
+set key right top
+set ytics ( '1e-5' 1e-5, '1e-3' 1e-3, '1e-1' 1e-1)
+set xtics auto
+#set format y "%.0s*10^{%T}"
+set xlabel "s"
+set ylabel "P(s)"
+set ytics 50
+set logscale
+
+plot "../Analysis/2B-ANALYSIS_AVA/AVALANCHE-EQUISPACED/AllAvadist/Ps_vs_sNs1-Q1.dat" w lp pt 4 lc "blue"  notitle ,\
+ "../Analysis/2B-ANALYSIS_AVA/AVALANCHE-EQUISPACED/AllAvadist/Ps_vs_sNs8-Q1.dat" w l lc "brown"  notitle ,\
+ "../Analysis/2B-ANALYSIS_AVA/AVALANCHE-EQUISPACED/AllAvadist/Ps_vs_sNs8-Q2.dat" w l lc "brown"  notitle ,\
+ "../Analysis/2B-ANALYSIS_AVA/AVALANCHE-EQUISPACED/AllAvadist/Ps_vs_sNs8-Q3.dat" w l lc "brown"  notitle ,\
+ "../Analysis/2B-ANALYSIS_AVA/AVALANCHE-EQUISPACED/AllAvadist/Ps_vs_sNs8-Q4.dat" w l lc "brown"  notitle ,\
+ "../Analysis/2B-ANALYSIS_AVA/AVALANCHE-EQUISPACED/AllAvadist/Ps_vs_sNs8-Q5.dat" w l lc "brown"  notitle ,\
+ "../Analysis/2B-ANALYSIS_AVA/AVALANCHE-EQUISPACED/AllAvadist/Ps_vs_sNs8-Q6.dat" w l lc "brown"  notitle ,\
+ "../Analysis/2B-ANALYSIS_AVA/AVALANCHE-EQUISPACED/AllAvadist/Ps_vs_sNs8-Q7.dat" w l lc "brown"  notitle ,\
+ "../Analysis/2B-ANALYSIS_AVA/AVALANCHE-EQUISPACED/AllAvadist/Ps_vs_sNs8-Q8.dat" w l lc "brown"  notitle ,\
+x**(-1.5)
+unset logscale
+
+
+
+
+
+
+#------------------------------------------------------------------------------
+# Down Right
+#------------------------------------------------------------------------------ 
+     set size 0.4,0.4
+     set origin 0.5,0.1
+set xrange  [1e3:2e5]	
+set yrange  [0.85:1]
+
+
+set logscale x
+set xlabel "frames"
+set ylabel "Ks"
+set xtics auto
+set ytics 0.1
+
+plot "../Analysis/2B-ANALYSIS_AVA/AVALANCHE-EQUISPACED/KappaS-Ns32.dat" u 2:3 w p pt 7 ps 0.8  t "",\
+"../Analysis/2B-ANALYSIS_AVA/AVALANCHE-EQUISPACED/KappaS-Ns16.dat" u 2:3 w p pt 7 ps 0.8 t "",\
+"../Analysis/2B-ANALYSIS_AVA/AVALANCHE-EQUISPACED/KappaS-Ns8.dat" u 2:3 w p pt 7 ps 0.8 t "",\
+"../Analysis/2B-ANALYSIS_AVA/AVALANCHE-EQUISPACED/KappaS-Ns4.dat" u 2:3 w p pt 7 ps 0.8 t "",\
+"../Analysis/2B-ANALYSIS_AVA/AVALANCHE-EQUISPACED/KappaS-Ns2.dat" u 2:3 w p pt 7 ps 0.8 t "",\
+"../Analysis/2B-ANALYSIS_AVA/AVALANCHE-EQUISPACED/KappaS-Ns1.dat" u 2:3 w p pt 7 ps 0.8 t ""
+
+     unset multiplot
+

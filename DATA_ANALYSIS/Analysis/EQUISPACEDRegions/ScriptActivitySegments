@@ -1,0 +1,33 @@
+Totaltime=$(head -n 1 ../../Files/Sp.txt  | awk '{print NF}')
+
+for Nsegments in 1 2 4 8 16 32; do
+duration=$(echo "$Totaltime/$Nsegments" |bc)
+
+for Q in $(seq 1 $Nsegments); do
+start=$(echo "($Q-1)*$duration+1" |bc)
+
+for W in 448 ; do
+
+cp ComputeActivity.f90 ProgAct.f90
+
+perl -pi -e "s[time=14400][time=$duration]g" ProgAct.f90
+perl -pi -e "s[Start_time=1][Start_time=$start]g" ProgAct.f90
+
+
+
+perl -pi -e "s[ResultsActivityFOLDER][ResultsActivity$Nsegments]g" ProgAct.f90
+
+#perl -pi -e "s[LL=448][LL=$W]g" ProgAct.f90
+#----------------------------------------
+
+perl -pi -e "s[ActivityALL.txt][Activity$W""-Q$Q"".txt]g" ProgAct.f90
+gfortran -O3  ProgAct.f90 -o Prun
+
+ 
+./Prun
+
+
+echo "-----------------------------------------"
+done 
+done
+done

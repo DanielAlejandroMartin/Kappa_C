@@ -1,0 +1,24 @@
+#This script generates all files for Figure 6
+
+# First go to folder EQUISPACEDRegions
+cd EQUISPACEDRegions 
+# Compute the Activity as a function of time (useful for avalanche analysis), and the correations on windows of different sizes
+bash ScriptActivitySegments; bash ScriptCorrelSegments
+
+# Go to Correlation Function Analysis folder
+cd ../2A-ANALYSIS_CCF/CCF2-ZeroFinderEQUISPACED
+# Compute the zeros of the function, and Kappa_C
+bash ScriptFindZeros; bash ScriptKappaC
+
+# Go to avalanche Analysis foder
+cd ../../2B-ANALYSIS_AVA/AVALANCHE-EQUISPACED
+# Compute avalance size ditribution 
+bash ScriptAva1-trFinder ScriptAva2-KappaCompute	ScriptAva3-Ps_vs_s_Plot
+ 
+#Go to this folder and compute Firing rate and First Autocorrelation Coefficient
+cd ../../2C-SimpleObservables/
+bash ScriptRateAC1 
+
+# Compute the correlation among different observables
+cd ../2D-Correlation/
+bash ScriptCorrel 

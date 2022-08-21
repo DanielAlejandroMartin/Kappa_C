@@ -1,0 +1,34 @@
+for Nsegments in 1 2 4 8 16 32; do
+
+folder=AllZeros-Ns$Nsegments
+mkdir -p $folder
+rm -f $folder""/*
+for Q in $(seq 1 $Nsegments); do
+for W in $(seq 128 32 448); do
+rm input.dat
+cp ../../EQUISPACEDRegions/ResultsCorrel$Nsegments""/AvgCCFLength$W""-Q$Q"".txt input.dat
+
+#Average over \Delta r=5
+awk '{C=int($1/5+.5);N[C]+=$3;D[C]+=$4} END {for (i=0;i<300;i++) {if (D[i]>0) {print i*5+2.5,N[i]/D[i]}}}' input.dat > avginput.dat
+# Compute D(r) as the sum of C(r') for r'<r, The Zero crossing of C(r) is the maximum of D(r)
+
+awk '{a+=$2; print $1, a}' avginput.dat > suminput.dat
+
+R=$( awk '{print $1,int($2*10000)}' suminput.dat  |sort -k 2 -n -r |sed -n 2p | awk '{print $1}')
+
+echo $W $R
+# Normalize pixels to microns
+echo $W $R |awk '{norm=400/512; print $1*norm,$2*norm}'>> $folder""/Zeros-Q$Q"".txt
+
+
+cp GnuFit XFit
+
+perl -pi -e "s[x00=50][x00=$R""]g" XFit
+gnuplot XFit
+Rnew=$(cat fitpar.txt)
+# Normalize pixels to microns
+echo $W $Rnew |awk '{norm=400/512; print $1*norm,$2*norm}'>> $folder""/ZerosImproved-Q$Q"".txt
+
+done
+done
+done
