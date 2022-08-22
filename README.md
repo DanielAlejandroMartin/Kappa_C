@@ -1,7 +1,7 @@
 # Kappa_C
 Codes for the article "Finite-size correlation behavior near a critical point: a simple metric for monitoring the state of a neural network" by Eyisto J. Aguilar Trejo et al.
 
-Simulations programmed mainly by Daniel A. Martin and Eyisto J. Aguilar Trejo, using gfortran and bash. Mouse brain activity download also requiered the use of modified jupyter-notebook algorithms.
+Simulations programmed mainly in gfortran and bash. Mouse brain activity download also requiered the use of modified jupyter-notebook algorithms and speciffic packages.
 
 Each computation requires several simple  codes.
 We have left some already computed results to ease code check.
@@ -27,7 +27,9 @@ You may generate a conda enviroenment to run an older version.
 After running, you will download Spike data (Sp.txt), neuron positions (coords.txt), and stimulus info (Static.txt and Nscenes.txt). They are saved in the folder "Files" (you should create it).
 
 Then go to "Analysis" folder, and run the following scripts: "ScriptRunFig6" and "ScriptRunFig7". 
+Go to "AnalysisResponses_Fig8" folder, and run: "ScriptRunFig8". 
 
 Finally, go to "3-Figures" and run
 gnuplot GnuFig6	
 gnuplot GnuFig7
+gnuplot GnuFig8
