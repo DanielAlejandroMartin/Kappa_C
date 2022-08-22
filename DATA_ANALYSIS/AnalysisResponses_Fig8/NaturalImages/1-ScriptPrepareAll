@@ -1,0 +1,2 @@
+ cat ../../Files/Nscenes.txt  |grep -v nan |awk '{if ($1>-0.5) {print int($1+1.5), int($2+0.5), int($3+0.5)}}' > ImprovedNatural.txt
+

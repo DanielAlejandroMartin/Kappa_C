@@ -1,0 +1,38 @@
+#First Prepare File
+# now Scene number, start time and end times are integers
+ cat ../../Files/Nscenes.txt  |grep -v nan |awk '{if ($1>-0.5) {print int($1+1.5), int($2+0.5), int($3+0.5)}}' > ImprovedNatural.txt
+
+# Run program to find responsive neurons
+gfortran -O3 Natural.f90
+./a.out
+
+
+
+
+# See which are the most responsive ones
+awk '{a[int($2)]++} END {for (i=0;i<120;i++) print i,a[i]+0}' DSI.txt |sort -k 2 -n |tail 
+
+#We chose the most responsve 8 neurons
+rm Selectivity.dat
+for target in 46 86 42 109 116 37 50 70; do
+
+for epoch in 1 2 3; do
+Res=$(cat DSI$epoch"".txt | awk -v stim=$target '{if ($2==stim) {a+= ($3-$4);b+=($3+$4);n++}} END {print a/b}')
+
+echo $epoch $Res >> Selectivity.dat
+done
+echo "" >> Selectivity.dat
+done
+
+rm ResAvg.dat
+for epoch in 1 2 3; do
+Res=$(awk -v i=$epoch '{if ($1==i) {R+=$2;R2+=$2*$2;n++}} END {R=R/n;R2=R2/n;Rerr=R2-R*R;Rerr=sqrt(Rerr/n); print R,Rerr}' Selectivity.dat)
+echo $epoch $Res >> ResAvg.dat
+done
+
+#  KappaC AC1 KappaS Rate are the values obtained in Fig. 7
+for var in KappaC AC1 KappaS Rate; do
+cat $var  | sed -n -e '2p;4p;7p' |awk '{print NR,$2}' > $var""ST.dat
+join  $var""ST.dat ResAvg.dat |awk '{print 1000*$2,$3,$4}' |sort -n | awk '{print 1/1000*$1,$2,$3}' > DSIAvg""VS$var"".dat
+
+done

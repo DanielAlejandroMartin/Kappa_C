@@ -1,0 +1,49 @@
+#Prepare Files: integer variables
+cat ../../Files/Static.txt |grep -v nan |awk '{print int($1/30+0.1+1), log($2*100)/log(2), int($3*4+0.1+1), int($4+0.1), int($5+0.1)}' > ImprovedStatic.txt
+
+#Run Program
+gfortran -O3 Static.f90; ./a.out 
+
+
+#SelectResponse
+top=5
+
+rm ResAll
+for angle in 1 2 3 4 5 6; do
+
+rm Res$angle
+awk -v ang=$angle '{if ($2==ang) {print ($3-$4)/($3+$4)*1000,$1,$2}}'  DSI.txt |sort -n |tail -n $top | awk '{print $2}' > toplist
+cat toplist
+
+for epoch in 1 2 3; do
+rm promed
+for i in $(cat toplist); do 
+sed -n "$i""p" DSI$epoch"".txt >> promed
+done
+
+Res=$(awk '{a+=$3-$4;b+=$3+$4;n++} END {print a/b}' promed)
+
+echo $epoch $Res >> Res$angle
+
+done
+cat  Res$angle >> ResAll
+
+done
+
+rm ResAvg.dat
+for epoch in 1 2 3; do
+Res=$(awk -v i=$epoch '{if ($1==i) {R+=$2;R2+=$2*$2;n++}} END {R=R/n;R2=R2/n;Rerr=R2-R*R;Rerr=sqrt(Rerr/n); print R,Rerr}' ResAll)
+echo $epoch $Res >> ResAvg.dat
+done
+
+
+
+for var in KappaC AC1 KappaS Rate; do
+cat $var  | sed -n -e '1p;5p;8p' |awk '{print NR,$2}' > $var""ST.dat
+join  $var""ST.dat ResAvg.dat |awk '{print 1000*$2,$3,$4}' |sort -n | awk '{print 1/1000*$1,$2,$3}' > DSIAvg""VS$var"".dat
+
+done
+
+
+
+rm Res*
