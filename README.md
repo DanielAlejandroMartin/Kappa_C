@@ -24,7 +24,7 @@ First, we should download files from Allen database. To do so, you should run "j
 Before that, allensdk tools have to be installed. To work properly, the allensdk has to run on python 3.8 or less (it does not work on python 3.9).
 You may generate a conda enviroenment to run an older version. 
 
-After running, you will download Spike data (Sp.txt), neuron positions (coords.txt), and stimulus info (Static.txt and Nscenes.txt). They are saved in the folder "Files" (you should create it).
+After running, you will download Spike data (Sp.txt), neuron positions (coords.txt), and stimulus info (Static.txt and Nscenes.txt). They are saved in the folder "Files" (you should create it). We have included a compressed folder including this files, "Files_Compressed.tar.gz".
 
 Then go to "Analysis" folder, and run the following scripts: "ScriptRunFig6" and "ScriptRunFig7". 
 Go to "AnalysisResponses_Fig8" folder, and run: "ScriptRunFig8". 
